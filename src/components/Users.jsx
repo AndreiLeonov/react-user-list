@@ -54,21 +54,14 @@ export const Users = () => {
   }
 
   //this is for Select:
-  const [value, setValue] = React.useState(10);
+  //'' - по умолчанию (как с сервера)
+  //asc - по возрастанию
+  //desc - по убыванию
+  const [sortType, setSortType] = React.useState('');
   const [open, setOpen] = React.useState(false);
-  
-  // const [isOrderAsc, setIsOrderAsc] = React.useState(true);
-  // if (value === 20) {
-  //   let order = isOrderAsc ? 'desc' : 'asc';
-  //   usersDataCopy = _.orderBy(usersDataCopy, ['created_at'], [order]);
-  //   setIsOrderAsc(!isOrderAsc);
-  // }
-//   const sortOrderHandler = () => {
-//     setData(OrderedPosts);
-// };
 
   const handleChange = (event) => {
-    setValue(event.target.value);
+    setSortType(event.target.value);
   };
 
   const handleClose = () => {
@@ -78,6 +71,12 @@ export const Users = () => {
   const handleOpen = () => {
     setOpen(true);
   };
+
+  if (sortType === 'asc') {
+    usersDataCopy = _.orderBy(usersDataCopy, ['created_at'], ['asc'])
+  } else if (sortType === 'desc') {
+    usersDataCopy = _.orderBy(usersDataCopy, ['created_at'], ['desc'])
+  }
 
   return (
     <div className={styles.commonStyle}>
@@ -115,12 +114,12 @@ export const Users = () => {
           open={open}
           onClose={handleClose}
           onOpen={handleOpen}
-          value={value}
+          value={sortType}
           onChange={handleChange}
         >
-          <MenuItem value={10}>Без сортировки</MenuItem>
-          <MenuItem value={20}>По возрастанию</MenuItem>
-          <MenuItem value={30}>По убыванию</MenuItem>
+          <MenuItem value={''}>Без сортировки</MenuItem>
+          <MenuItem value={'asc'}>По возрастанию</MenuItem>
+          <MenuItem value={'desc'}>По убыванию</MenuItem>
         </Select>
       </FormControl>
         <User usersData={usersDataCopy} />
