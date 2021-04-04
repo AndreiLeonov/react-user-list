@@ -20,28 +20,16 @@ export const Users = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  // const getUserData = (state) => {
-  //   return state.users.list.map((user) => ({
-  //     created: user.created_at,
-  //     firstName: user.first_name,
-  //     id: user.id,
-  //     isActive: user.is_active,
-  //     lastName: user.last_name
-  //   }));
-  // };
-
+  //takes usersData and isLoading from userReducer
   const usersData = useSelector((state) => state.users.list);
   const isLoading = useSelector((state) => state.users.isLoading);
 
-  // const newDate = [...usersData].map((user) => new Date(user.created_at)); // проверить как работает в редьюсере, а потом удалить
-  // console.log(newDate);
-
-  //this is for Button
+  //this is for Button(materialUI)
   const getUsersHandler = () => {
     dispatch(getUsersThunk());
   };
 
-  //this is for Checkbox:
+  //this is for Checkbox(materialUI):
   const [checked, setChecked] = React.useState(false);
   const handleChangeCheckbox = (event) => {
     setChecked(event.target.checked);
