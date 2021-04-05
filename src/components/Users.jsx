@@ -7,7 +7,6 @@ import styles from "../styles/styles.module.css";
 import { User } from "./User";
 import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
-import { Error } from "./Error";
 
 //this is styles for Select
 const useStyles = makeStyles((theme) => ({
@@ -132,7 +131,7 @@ export const Users = () => {
       </FormControl>
       <input type='text' placeholder='Начните поиск' onChange={(e) => setSearch(e.target.value)} value={search}/>
       {/* {isError ? <p>ошибок есть</p> : <p>ошибок нет</p>} */}
-        <User usersData={usersDataCopy} />
+        <User usersData={usersDataCopy}/>
       </div>
       
       }

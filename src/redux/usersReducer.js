@@ -2,8 +2,7 @@ import { fetchData } from "../mockData";
 
 const initialState = {
   isLoading: false,
-  list: [
-  ]
+  list: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -11,20 +10,13 @@ const reducer = (state = initialState, action) => {
     case "USERS_REDUCER/FETCH_DATA":
       return {
         ...state,
-        list: [...action.fetchData], 
-        // ...fetchData.created_at.map((user) => new Date(user.created_at)), 
-        //...fetchData.created_at.map((user) => new Date(user.created_at))]
+        list: [...action.fetchData],
       };
     case "USERS_REDUCER/IS_LOADING":
-        return {
-            ...state,
-            isLoading: action.isLoading
-          };
-    case "USERS_REDUCER/DATE_CHANGE":
-        // return {
-        //     ...state,
-        //     list: [state.list.map((user) => new Date(user.created_at))] 
-        // }
+      return {
+        ...state,
+        isLoading: action.isLoading,
+      };
     default:
       return state;
   }
@@ -34,31 +26,26 @@ const reducer = (state = initialState, action) => {
 const getUsersAC = (fetchData) => {
   return {
     type: "USERS_REDUCER/FETCH_DATA",
-    fetchData
+    fetchData,
   };
 };
 const isLoadingAC = (isLoading) => {
-    return {
-      type: "USERS_REDUCER/IS_LOADING",
-      isLoading
-    };
+  return {
+    type: "USERS_REDUCER/IS_LOADING",
+    isLoading,
   };
-const dateChangeAC = () => {
-    return {
-      type: "USERS_REDUCER/DATE_CHANGE",
-    };
-  };
+};
 
 //thunk
 //добавить обработку ошибок
 export const getUsersThunk = () => (dispatch) => {
-    dispatch(isLoadingAC(true));
-    fetchData()
+  dispatch(isLoadingAC(true));
+  fetchData()
     .then((response) => {
-        dispatch(getUsersAC(response));
-        dispatch(isLoadingAC(false));
-        dispatch(dateChangeAC()); 
-})
+      dispatch(getUsersAC(response));
+      dispatch(isLoadingAC(false));
+    })
+    .catch((error) => console.log(error));
 };
 
 export default reducer;
