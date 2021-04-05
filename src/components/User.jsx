@@ -8,7 +8,7 @@ export const User = (props) => {
         <div>
             {
             props.usersData
-            .map((user) => ( <div key={v1()} className={styles.commonStyle}> - {user.last_name} {user.first_name} {user.created_at} </div> ))
+            .map((user) => ( <div key={v1()} className={styles.commonStyle}> {user.last_name} {user.first_name} {user.created_at} </div> ))
             }
             </div>
     );

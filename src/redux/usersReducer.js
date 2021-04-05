@@ -21,10 +21,10 @@ const reducer = (state = initialState, action) => {
             isLoading: action.isLoading
           };
     case "USERS_REDUCER/DATE_CHANGE":
-        return {
-            ...state,
-            list: [...state.list, state.list.map((user) => new Date(user.created_at))] 
-        }
+        // return {
+        //     ...state,
+        //     list: [state.list.map((user) => new Date(user.created_at))] 
+        // }
     default:
       return state;
   }
@@ -50,6 +50,7 @@ const dateChangeAC = () => {
   };
 
 //thunk
+//добавить обработку ошибок
 export const getUsersThunk = () => (dispatch) => {
     dispatch(isLoadingAC(true));
     fetchData()

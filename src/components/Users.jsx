@@ -16,12 +16,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+//обернуть react memo
 export const Users = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
   //takes usersData and isLoading from userReducer
-  const usersData = useSelector((state) => state.users.list);
+  let usersDataCopy = useSelector((state) => state.users.list);
   const isLoading = useSelector((state) => state.users.isLoading);
 
   //this is for Button(materialUI)
@@ -36,9 +37,9 @@ export const Users = () => {
   };
 
   //this is for filtering users:
-  let usersDataCopy = [...usersData]
+  //let usersDataCopy = [...usersData]
   if (checked === true) {
-    usersDataCopy = usersData.filter(u => u.is_active === true)
+    usersDataCopy = usersDataCopy.filter(u => u.is_active === true)
   }
 
   //this is for Select:
@@ -65,6 +66,23 @@ export const Users = () => {
   } else if (sortType === 'desc') {
     usersDataCopy = _.orderBy(usersDataCopy, ['created_at'], ['desc'])
   }
+
+  //for Search users:
+  const [search, setSearch] = React.useState('');
+
+  if (search.length > 0) {
+    
+    usersDataCopy = usersDataCopy.filter((i) => {
+      return i.last_name.toLowerCase().match(search.toLowerCase())
+    })
+  } 
+
+  // React.useEffect(() => {
+  //   usersDataCopy = usersDataCopy.filter((i) => {
+  //     return i.last_name.match(search)
+  //   })
+
+  // },[search])
 
   return (
     <div className={styles.commonStyle}>
@@ -110,6 +128,7 @@ export const Users = () => {
           <MenuItem value={'desc'}>По убыванию</MenuItem>
         </Select>
       </FormControl>
+      <input type='text' placeholder='Начните поиск' onChange={(e) => setSearch(e.target.value)} value={search}/>
         <User usersData={usersDataCopy} />
       </div>
       
