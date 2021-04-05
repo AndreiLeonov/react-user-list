@@ -7,6 +7,7 @@ import styles from "../styles/styles.module.css";
 import { User } from "./User";
 import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
+import { Error } from "./Error";
 
 //this is styles for Select
 const useStyles = makeStyles((theme) => ({
@@ -69,20 +70,21 @@ export const Users = () => {
 
   //for Search users:
   const [search, setSearch] = React.useState('');
+  //const [isError, setIsError] = React.useState(false);
+
+  // if ( (search.length > 0) && (!usersDataCopy.includes(search.toLowerCase()))) {
+  //   setIsError(true);
+  // } else {
+  //   usersDataCopy = usersDataCopy.filter((i) => {
+  //     return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
+  //   }) 
+  // }
 
   if (search.length > 0) {
-    
     usersDataCopy = usersDataCopy.filter((i) => {
-      return i.last_name.toLowerCase().match(search.toLowerCase())
-    })
-  } 
-
-  // React.useEffect(() => {
-  //   usersDataCopy = usersDataCopy.filter((i) => {
-  //     return i.last_name.match(search)
-  //   })
-
-  // },[search])
+      return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
+  })
+}
 
   return (
     <div className={styles.commonStyle}>
@@ -113,7 +115,7 @@ export const Users = () => {
         label="Показать только активных пользователей"
       />
       <FormControl className={classes.formControl}>
-        <InputLabel className={styles.selectStyle} id="demo-controlled-open-select-label">Отсортировать</InputLabel>
+        <InputLabel className={styles.selectStyle} id="demo-controlled-open-select-label">Сортировать по дате создания</InputLabel>
         <Select
           labelId="demo-controlled-open-select-label"
           id="demo-controlled-open-select"
@@ -129,6 +131,7 @@ export const Users = () => {
         </Select>
       </FormControl>
       <input type='text' placeholder='Начните поиск' onChange={(e) => setSearch(e.target.value)} value={search}/>
+      {/* {isError ? <p>ошибок есть</p> : <p>ошибок нет</p>} */}
         <User usersData={usersDataCopy} />
       </div>
       

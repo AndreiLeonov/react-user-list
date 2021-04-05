@@ -3,6 +3,7 @@ import { v1 } from "uuid";
 import styles from '../styles/styles.module.css';
 
 export const User = (props) => {
+    //ul > li
 
     return (
         <div>
