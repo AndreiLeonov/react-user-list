@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //обернуть react memo
-export const Users = () => {
+export const Users = React.memo( () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -69,7 +69,7 @@ export const Users = () => {
 
   //for Search users:
   const [search, setSearch] = React.useState('');
-  //const [isError, setIsError] = React.useState(false);
+  const [isError, setIsError] = React.useState(false);
 
   // if ( (search.length > 0) && (!usersDataCopy.includes(search.toLowerCase()))) {
   //   setIsError(true);
@@ -79,11 +79,23 @@ export const Users = () => {
   //   }) 
   // }
 
-  if (search.length > 0) {
-    usersDataCopy = usersDataCopy.filter((i) => {
-      return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
-  })
-}
+//   if (search.length > 0) {
+//     usersDataCopy = usersDataCopy.filter((i) => {
+//       return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
+//   })
+// } 
+
+
+  usersDataCopy = usersDataCopy.filter((i) => {
+    return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
+})
+
+
+
+// search.length > 0 ? usersDataCopy = usersDataCopy.filter((i) => {
+//   return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
+// }) : <div>NOTHING</div>
+
 
   return (
     <div className={styles.commonStyle}>
@@ -130,11 +142,12 @@ export const Users = () => {
         </Select>
       </FormControl>
       <input type='text' placeholder='Начните поиск' onChange={(e) => setSearch(e.target.value)} value={search}/>
-      {/* {isError ? <p>ошибок есть</p> : <p>ошибок нет</p>} */}
+      {usersDataCopy.length ? <></> : <p>Ничего не найдено</p>}
+      {isError ? <p>ошибки есть</p> : <></>}
         <User usersData={usersDataCopy}/>
       </div>
       
       }
     </div>
   );
-};
+});

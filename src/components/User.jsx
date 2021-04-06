@@ -3,7 +3,7 @@ import { v1 } from "uuid";
 import styles from '../styles/styles.module.css';
 import moment from 'moment';
 
-export const User = (props) => {
+export const User = React.memo((props) => {
 
     return (
         <div>
@@ -14,4 +14,4 @@ export const User = (props) => {
             </div>
     );
 
-}
+});
