@@ -89,11 +89,17 @@ export const Users = React.memo(() => {
     setSearch("");
   };
 
-  window.onkeydown = function (event) {
-    if (event.keyCode == 27) {
+  // window.onkeydown = function (event) {
+  //   if (event.keyCode == 27) {
+  //     setSearch("");
+  //   }
+  // };
+  document.addEventListener('keydown', function(event) {
+    const key = event.key; // const {key} = event; in ES6+
+    if (key === "Escape") {
       setSearch("");
     }
-  };
+});
 
   return (
     <div className={styles.commonStyle}>
