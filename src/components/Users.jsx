@@ -2,13 +2,21 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsersThunk } from "../redux/usersReducer";
-import { Checkbox, CircularProgress, FormControl, FormControlLabel, InputAdornment, InputLabel, MenuItem, Select } from "@material-ui/core";
+import {
+  Checkbox,
+  CircularProgress,
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@material-ui/core";
 import styles from "../styles/styles.module.css";
 import { User } from "./User";
-import _ from 'lodash';
-import { makeStyles } from '@material-ui/core/styles';
+import _ from "lodash";
+import { makeStyles } from "@material-ui/core/styles";
 
-//this is styles for Select
+//styles for Select
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
@@ -16,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-//обернуть react memo
 export const Users = React.memo(() => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -25,33 +32,31 @@ export const Users = React.memo(() => {
   let usersDataCopy = useSelector((state) => state.users.list);
   const isLoading = useSelector((state) => state.users.isLoading);
 
-  //this is for Button(materialUI)
   const getUsersHandler = () => {
     dispatch(getUsersThunk());
   };
 
-  //this is for Checkbox(materialUI):
+  //for Checkbox(materialUI):
   const [checked, setChecked] = React.useState(false);
   const handleChangeCheckbox = (event) => {
     setChecked(event.target.checked);
   };
 
-  //this is for filtering users:
-  //let usersDataCopy = [...usersData]
+  //for filtering users:
   if (checked === true) {
-    usersDataCopy = usersDataCopy.filter(u => u.is_active === true)
+    usersDataCopy = usersDataCopy.filter((u) => u.is_active === true);
   }
 
-  //this is for Select:
-  //'' - по умолчанию (как с сервера)
+  //for Select:
+  //'withoutSorting' - по умолчанию (как с сервера)
   //asc - по возрастанию
   //desc - по убыванию
-  const [sortType, setSortType] = React.useState('withoutSorting');
+  const [sortType, setSortType] = React.useState("withoutSorting");
   const [open, setOpen] = React.useState(false);
 
   const handleChange = (event) => {
     setSortType(event.target.value);
-  };  
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -61,50 +66,34 @@ export const Users = React.memo(() => {
     setOpen(true);
   };
 
-  if (sortType === 'asc') {
-    usersDataCopy = _.orderBy(usersDataCopy, ['created_at'], ['asc'])
-  } else if (sortType === 'desc') {
-    usersDataCopy = _.orderBy(usersDataCopy, ['created_at'], ['desc'])
+  if (sortType === "asc") {
+    usersDataCopy = _.orderBy(usersDataCopy, ["created_at"], ["asc"]);
+  } else if (sortType === "desc") {
+    usersDataCopy = _.orderBy(usersDataCopy, ["created_at"], ["desc"]);
   }
 
   //for Search users:
-  const [search, setSearch] = React.useState('');
-  //const [isError, setIsError] = React.useState(false);
+  const [search, setSearch] = React.useState("");
   const [nameFocused, setNameFocused] = React.useState(false);
 
-
-  // if ( (search.length > 0) && (!usersDataCopy.includes(search.toLowerCase()))) {
-  //   setIsError(true);
-  // } else {
-  //   usersDataCopy = usersDataCopy.filter((i) => {
-  //     return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
-  //   }) 
-  // }
-
-    if (search.length > 0) {
-      usersDataCopy = usersDataCopy.filter((i) => {
-        return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
-    })
-  } 
-
-
-  // usersDataCopy = usersDataCopy.filter((i) => {
-  //   return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
-  // })
-
-
-
-  // search.length > 0 ? usersDataCopy = usersDataCopy.filter((i) => {
-  //   return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
-  // }) : <div>NOTHING</div>
+  if (search.length > 0) {
+    usersDataCopy = usersDataCopy.filter((i) => {
+      return (
+        i.last_name.toLowerCase().match(search.toLowerCase()) ||
+        i.first_name.toLowerCase().match(search.toLowerCase())
+      );
+    });
+  };
 
   const resetHandler = () => {
-    setSearch('');
-  }
+    setSearch("");
+  };
 
-  // if (nameFocused && e.keyCode == 27) {
-  //   setSearch('');
-  // }
+  window.onkeydown = function (event) {
+    if (event.keyCode == 27) {
+      setSearch("");
+    }
+  };
 
   return (
     <div className={styles.commonStyle}>
@@ -121,7 +110,7 @@ export const Users = React.memo(() => {
         <div className={styles.commonStyle}>
           <CircularProgress disableShrink />
         </div>
-      ) :
+      ) : (
         <div className={styles.commonStyle}>
           <FormControlLabel
             control={
@@ -135,7 +124,12 @@ export const Users = React.memo(() => {
             label="Показать только активных пользователей"
           />
           <FormControl className={classes.formControl}>
-            <InputLabel className={styles.selectStyle} id="demo-controlled-open-select-label">Сортировать по дате создания</InputLabel>
+            <InputLabel
+              className={styles.selectStyle}
+              id="demo-controlled-open-select-label"
+            >
+              Сортировать по дате создания
+            </InputLabel>
             <Select
               labelId="demo-controlled-open-select-label"
               id="demo-controlled-open-select"
@@ -144,27 +138,38 @@ export const Users = React.memo(() => {
               onOpen={handleOpen}
               value={sortType}
               onChange={handleChange}
-              defaultValue={'1'}
+              defaultValue={"1"}
             >
-              <MenuItem value={'withoutSorting'}>Без сортировки</MenuItem>
-              <MenuItem value={'asc'}>По возрастанию</MenuItem>
-              <MenuItem value={'desc'}>По убыванию</MenuItem>
+              <MenuItem value={"withoutSorting"}>Без сортировки</MenuItem>
+              <MenuItem value={"asc"}>По возрастанию</MenuItem>
+              <MenuItem value={"desc"}>По убыванию</MenuItem>
             </Select>
           </FormControl>
           <input
-            type='text' 
-            placeholder='Начните поиск' 
-            onChange={(e) => setSearch(e.target.value)} 
-            value={search} 
-            onFocus={e => setNameFocused(true)}
-            onBlur={e => setNameFocused(false)}
+            type="text"
+            placeholder="Начните поиск"
+            onChange={(e) => setSearch(e.target.value)}
+            value={search}
+            onFocus={(e) => setNameFocused(true)}
+            onBlur={(e) => setNameFocused(false)}
           />
-          {!!search.length && <Button variant="contained" color="secondary" onClick={resetHandler}>Сбросить</Button>}
-          {(nameFocused && search.length && usersDataCopy.length === 0) ? <p>Ничего не найдено</p> : <></> }
+          {!!search.length && (
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={resetHandler}
+            >
+              Сбросить
+            </Button>
+          )}
+          {nameFocused && search.length && usersDataCopy.length === 0 ? (
+            <p>Ничего не найдено</p>
+          ) : (
+            <></>
+          )}
           <User usersData={usersDataCopy} />
         </div>
-
-      }
+      )}
     </div>
   );
 });
