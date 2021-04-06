@@ -46,12 +46,12 @@ export const Users = React.memo(() => {
   //'' - по умолчанию (как с сервера)
   //asc - по возрастанию
   //desc - по убыванию
-  const [sortType, setSortType] = React.useState('');
+  const [sortType, setSortType] = React.useState('withoutSorting');
   const [open, setOpen] = React.useState(false);
 
   const handleChange = (event) => {
     setSortType(event.target.value);
-  };
+  };  
 
   const handleClose = () => {
     setOpen(false);
@@ -81,16 +81,16 @@ export const Users = React.memo(() => {
   //   }) 
   // }
 
-  //   if (search.length > 0) {
-  //     usersDataCopy = usersDataCopy.filter((i) => {
-  //       return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
-  //   })
-  // } 
+    if (search.length > 0) {
+      usersDataCopy = usersDataCopy.filter((i) => {
+        return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
+    })
+  } 
 
 
-  usersDataCopy = usersDataCopy.filter((i) => {
-    return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
-  })
+  // usersDataCopy = usersDataCopy.filter((i) => {
+  //   return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
+  // })
 
 
 
@@ -98,6 +98,13 @@ export const Users = React.memo(() => {
   //   return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
   // }) : <div>NOTHING</div>
 
+  const resetHandler = () => {
+    setSearch('');
+  }
+
+  // if (nameFocused && e.keyCode == 27) {
+  //   setSearch('');
+  // }
 
   return (
     <div className={styles.commonStyle}>
@@ -137,8 +144,9 @@ export const Users = React.memo(() => {
               onOpen={handleOpen}
               value={sortType}
               onChange={handleChange}
+              defaultValue={'1'}
             >
-              <MenuItem value={''}>Без сортировки</MenuItem>
+              <MenuItem value={'withoutSorting'}>Без сортировки</MenuItem>
               <MenuItem value={'asc'}>По возрастанию</MenuItem>
               <MenuItem value={'desc'}>По убыванию</MenuItem>
             </Select>
@@ -151,8 +159,8 @@ export const Users = React.memo(() => {
             onFocus={e => setNameFocused(true)}
             onBlur={e => setNameFocused(false)}
           />
-          {(nameFocused && usersDataCopy.length === 0) ? <p>Ничего не найдено</p> : <></> }
-          {/* {isError ? <p>ошибки есть</p> : <></>} */}
+          {!!search.length && <Button variant="contained" color="secondary" onClick={resetHandler}>Сбросить</Button>}
+          {(nameFocused && search.length && usersDataCopy.length === 0) ? <p>Ничего не найдено</p> : <></> }
           <User usersData={usersDataCopy} />
         </div>
 
