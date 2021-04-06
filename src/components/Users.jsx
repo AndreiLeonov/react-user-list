@@ -2,7 +2,7 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsersThunk } from "../redux/usersReducer";
-import { Checkbox, CircularProgress, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from "@material-ui/core";
+import { Checkbox, CircularProgress, FormControl, FormControlLabel, InputAdornment, InputLabel, MenuItem, Select } from "@material-ui/core";
 import styles from "../styles/styles.module.css";
 import { User } from "./User";
 import _ from 'lodash';
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //обернуть react memo
-export const Users = React.memo( () => {
+export const Users = React.memo(() => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -69,7 +69,9 @@ export const Users = React.memo( () => {
 
   //for Search users:
   const [search, setSearch] = React.useState('');
-  const [isError, setIsError] = React.useState(false);
+  //const [isError, setIsError] = React.useState(false);
+  const [nameFocused, setNameFocused] = React.useState(false);
+
 
   // if ( (search.length > 0) && (!usersDataCopy.includes(search.toLowerCase()))) {
   //   setIsError(true);
@@ -79,22 +81,22 @@ export const Users = React.memo( () => {
   //   }) 
   // }
 
-//   if (search.length > 0) {
-//     usersDataCopy = usersDataCopy.filter((i) => {
-//       return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
-//   })
-// } 
+  //   if (search.length > 0) {
+  //     usersDataCopy = usersDataCopy.filter((i) => {
+  //       return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
+  //   })
+  // } 
 
 
   usersDataCopy = usersDataCopy.filter((i) => {
     return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
-})
+  })
 
 
 
-// search.length > 0 ? usersDataCopy = usersDataCopy.filter((i) => {
-//   return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
-// }) : <div>NOTHING</div>
+  // search.length > 0 ? usersDataCopy = usersDataCopy.filter((i) => {
+  //   return i.last_name.toLowerCase().match(search.toLowerCase()) || i.first_name.toLowerCase().match(search.toLowerCase())
+  // }) : <div>NOTHING</div>
 
 
   return (
@@ -112,41 +114,48 @@ export const Users = React.memo( () => {
         <div className={styles.commonStyle}>
           <CircularProgress disableShrink />
         </div>
-      ) : 
-      <div className={styles.commonStyle}>
-        <FormControlLabel
-        control={
-          <Checkbox
-            checked={checked}
-            onChange={handleChangeCheckbox}
-            name="checkedB"
-            color="primary"
+      ) :
+        <div className={styles.commonStyle}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={checked}
+                onChange={handleChangeCheckbox}
+                name="checkedB"
+                color="primary"
+              />
+            }
+            label="Показать только активных пользователей"
           />
-        }
-        label="Показать только активных пользователей"
-      />
-      <FormControl className={classes.formControl}>
-        <InputLabel className={styles.selectStyle} id="demo-controlled-open-select-label">Сортировать по дате создания</InputLabel>
-        <Select
-          labelId="demo-controlled-open-select-label"
-          id="demo-controlled-open-select"
-          open={open}
-          onClose={handleClose}
-          onOpen={handleOpen}
-          value={sortType}
-          onChange={handleChange}
-        >
-          <MenuItem value={''}>Без сортировки</MenuItem>
-          <MenuItem value={'asc'}>По возрастанию</MenuItem>
-          <MenuItem value={'desc'}>По убыванию</MenuItem>
-        </Select>
-      </FormControl>
-      <input type='text' placeholder='Начните поиск' onChange={(e) => setSearch(e.target.value)} value={search}/>
-      {usersDataCopy.length ? <></> : <p>Ничего не найдено</p>}
-      {isError ? <p>ошибки есть</p> : <></>}
-        <User usersData={usersDataCopy}/>
-      </div>
-      
+          <FormControl className={classes.formControl}>
+            <InputLabel className={styles.selectStyle} id="demo-controlled-open-select-label">Сортировать по дате создания</InputLabel>
+            <Select
+              labelId="demo-controlled-open-select-label"
+              id="demo-controlled-open-select"
+              open={open}
+              onClose={handleClose}
+              onOpen={handleOpen}
+              value={sortType}
+              onChange={handleChange}
+            >
+              <MenuItem value={''}>Без сортировки</MenuItem>
+              <MenuItem value={'asc'}>По возрастанию</MenuItem>
+              <MenuItem value={'desc'}>По убыванию</MenuItem>
+            </Select>
+          </FormControl>
+          <input
+            type='text' 
+            placeholder='Начните поиск' 
+            onChange={(e) => setSearch(e.target.value)} 
+            value={search} 
+            onFocus={e => setNameFocused(true)}
+            onBlur={e => setNameFocused(false)}
+          />
+          {(nameFocused && usersDataCopy.length === 0) ? <p>Ничего не найдено</p> : <></> }
+          {/* {isError ? <p>ошибки есть</p> : <></>} */}
+          <User usersData={usersDataCopy} />
+        </div>
+
       }
     </div>
   );
