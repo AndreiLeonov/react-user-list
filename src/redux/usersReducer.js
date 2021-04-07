@@ -22,7 +22,7 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-//actions
+//actions:
 const getUsersAC = (fetchData) => {
   return {
     type: "USERS_REDUCER/FETCH_DATA",
@@ -36,8 +36,7 @@ const isLoadingAC = (isLoading) => {
   };
 };
 
-//thunk
-//добавить обработку ошибок
+//thunk:
 export const getUsersThunk = () => (dispatch) => {
   dispatch(isLoadingAC(true));
   fetchData()
